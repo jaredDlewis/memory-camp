@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Memory Camp — Random Word Training</title>
+    <link rel="stylesheet" href="styles.css" />
+    <link
+      rel="icon"
+      href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><text y='26' font-size='26'>🧠</text></svg>"
+    />
+  </head>
+  <body>
+    <header class="site-header">
+      <a class="brand" href="#" data-nav="setup">memory<span>camp</span></a>
+      <nav>
+        <button type="button" class="link-button" data-nav="setup">Train</button>
+        <button type="button" class="link-button" data-nav="results">Results</button>
+      </nav>
+    </header>
+
+    <main>
+      <!-- Setup -->
+      <section id="screen-setup" class="screen" hidden>
+        <h1>Words: memorize &amp; recall</h1>
+        <p class="lede">
+          Memorise as many random words as you can, then reproduce them in order. Level N gives you
+          5 × N words; you pass a level by recalling every word correctly.
+        </p>
+
+        <div class="setup-grid">
+          <label class="field">
+            <span>Level</span>
+            <input id="level-input" type="number" min="1" step="1" value="1" />
+          </label>
+          <p class="field-note">
+            <strong id="word-count-preview">5 words</strong>
+            <button type="button" class="link-button" id="custom-count-toggle">
+              use a custom word count
+            </button>
+          </p>
+          <p class="field-note lock-note" id="level-lock-note"></p>
+          <label class="field" id="custom-count-field" hidden>
+            <span>Words</span>
+            <input id="custom-count-input" type="number" min="1" step="1" value="5" />
+          </label>
+        </div>
+
+        <details class="settings">
+          <summary>Timings &amp; options</summary>
+          <div class="settings-grid">
+            <label class="field">
+              <span>Countdown (s)</span>
+              <input id="setting-countdown" type="number" min="1" step="1" />
+            </label>
+            <label class="field">
+              <span>Memorise (min)</span>
+              <input id="setting-memorize" type="number" min="0.1" step="0.5" />
+            </label>
+            <label class="field">
+              <span>Gap (s)</span>
+              <input id="setting-gap" type="number" min="1" step="1" />
+            </label>
+            <label class="field">
+              <span>Recall (min)</span>
+              <input id="setting-recall" type="number" min="0.1" step="0.5" />
+            </label>
+            <label class="checkbox">
+              <input id="setting-typos" type="checkbox" />
+              <span>Accept single-character misspellings as correct</span>
+            </label>
+            <button type="button" class="link-button" id="reset-settings">
+              reset to competition defaults (5s / 5 min / 10s / 15 min)
+            </button>
+          </div>
+        </details>
+
+        <p class="error" id="setup-error" hidden></p>
+        <button type="button" class="primary" id="start-button">Start</button>
+      </section>
+
+      <!-- Countdown / gap interstitials -->
+      <section id="screen-countdown" class="screen interstitial" hidden>
+        <h1 id="countdown-heading">Countdown to memorising!</h1>
+        <div class="clock" id="countdown-clock">00:00</div>
+      </section>
+
+      <!-- Memorise -->
+      <section id="screen-memorize" class="screen" hidden>
+        <div class="stage-header">
+          <h1>Memorise</h1>
+          <div class="stage-meta">
+            <span class="level-label" id="memorize-level"></span>
+            <div class="clock" id="memorize-clock">00:00</div>
+          </div>
+        </div>
+        <div class="stage-body">
+          <div class="word-columns" id="memorize-list"></div>
+          <div class="focus">
+            <div class="focus-card">
+              <button type="button" class="step" data-step="-1" aria-label="Previous word">◀</button>
+              <div class="focus-slot">
+                <span class="focus-index" id="memorize-index">1</span>
+                <span class="focus-word" id="memorize-word"></span>
+              </div>
+              <button type="button" class="step" data-step="1" aria-label="Next word">▶</button>
+            </div>
+            <p class="hint">← / → or space to move between words</p>
+          </div>
+        </div>
+        <button type="button" class="primary" id="to-gap-button">Continue to reproduction</button>
+      </section>
+
+      <!-- Recall -->
+      <section id="screen-recall" class="screen" hidden>
+        <div class="stage-header">
+          <h1>Reproduction</h1>
+          <div class="stage-meta">
+            <span class="level-label" id="recall-level"></span>
+            <div class="clock" id="recall-clock">00:00</div>
+          </div>
+        </div>
+        <div class="stage-body">
+          <div class="word-columns" id="recall-list"></div>
+          <div class="focus">
+            <div class="focus-card">
+              <button type="button" class="step" data-step="-1" aria-label="Previous word">◀</button>
+              <div class="focus-slot">
+                <span class="focus-index" id="recall-index">1</span>
+                <input
+                  id="recall-input"
+                  type="text"
+                  autocomplete="off"
+                  autocorrect="off"
+                  autocapitalize="off"
+                  spellcheck="false"
+                />
+              </div>
+              <button type="button" class="step" data-step="1" aria-label="Next word">▶</button>
+            </div>
+            <p class="hint">Enter for the next word, Shift+Enter to go back</p>
+          </div>
+        </div>
+        <button type="button" class="primary" id="to-evaluation-button">Continue to evaluation</button>
+      </section>
+
+      <!-- Evaluation -->
+      <section id="screen-evaluation" class="screen" hidden>
+        <div class="stage-header">
+          <h1>Evaluation</h1>
+          <span class="level-label" id="evaluation-level"></span>
+        </div>
+        <p class="banner" id="evaluation-banner"></p>
+        <dl class="stats" id="evaluation-stats"></dl>
+        <div class="word-columns review" id="evaluation-list"></div>
+        <div class="button-row">
+          <button type="button" class="primary" id="retry-button">Try again</button>
+          <button type="button" id="next-level-button">Next level</button>
+          <button type="button" id="evaluation-home-button">Back to start</button>
+        </div>
+      </section>
+
+      <!-- Results -->
+      <section id="screen-results" class="screen" hidden>
+        <h1>Results</h1>
+        <h2>Best per level</h2>
+        <div class="table-scroll"><table id="level-summary"></table></div>
+        <h2>Recent attempts</h2>
+        <div class="table-scroll"><table id="attempt-history"></table></div>
+        <div class="button-row">
+          <button type="button" class="primary" data-nav="setup">Back to training</button>
+          <button type="button" class="danger" id="clear-history-button">Clear history</button>
+        </div>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <span>Memory Camp — free random word training, inspired by memocamp.com</span>
+    </footer>
+
+    <script type="module" src="js/main.js"></script>
+  </body>
+</html>
