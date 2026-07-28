@@ -49,7 +49,7 @@ function startRun({ level, wordCount, settings }) {
 function beginMemorize() {
   memorize.start(run, () => {
     interstitial.start({
-      text: 'There’s still some time until the reproduction stage!',
+      text: 'The reproduction stage will begin soon',
       seconds: run.settings.gapSeconds,
       onComplete: beginRecall,
     });

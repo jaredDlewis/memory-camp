@@ -100,8 +100,10 @@
             <div class="focus-card">
               <button type="button" class="step" data-step="-1" aria-label="Previous word">◀</button>
               <div class="focus-slot">
-                <span class="focus-index" id="memorize-index">1</span>
-                <span class="focus-word" id="memorize-word"></span>
+                <div class="focus-line">
+                  <span class="focus-index" id="memorize-index">1</span>
+                  <span class="focus-word" id="memorize-word"></span>
+                </div>
               </div>
               <button type="button" class="step" data-step="1" aria-label="Next word">▶</button>
             </div>
@@ -126,15 +128,17 @@
             <div class="focus-card">
               <button type="button" class="step" data-step="-1" aria-label="Previous word">◀</button>
               <div class="focus-slot">
-                <span class="focus-index" id="recall-index">1</span>
-                <input
-                  id="recall-input"
-                  type="text"
-                  autocomplete="off"
-                  autocorrect="off"
-                  autocapitalize="off"
-                  spellcheck="false"
-                />
+                <div class="focus-line">
+                  <span class="focus-index" id="recall-index">1</span>
+                  <input
+                    id="recall-input"
+                    type="text"
+                    autocomplete="off"
+                    autocorrect="off"
+                    autocapitalize="off"
+                    spellcheck="false"
+                  />
+                </div>
               </div>
               <button type="button" class="step" data-step="1" aria-label="Next word">▶</button>
             </div>
