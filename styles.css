@@ -84,7 +84,11 @@
 
 body {
   margin: 0;
-  min-height: 100vh;
+  min-height: 100dvh;
+  /* Nothing should ever scroll the page sideways — wide content (the word
+     columns, the results tables) scrolls inside its own container instead. */
+  overflow-x: hidden;
+  -webkit-tap-highlight-color: transparent;
   display: flex;
   flex-direction: column;
   font-family: ui-sans-serif, -apple-system, "SF Pro Text", "Segoe UI", system-ui, sans-serif;
@@ -170,6 +174,8 @@ main {
   flex-direction: column;
   gap: 1.25rem;
   align-items: flex-start;
+  width: 100%;
+  min-width: 0;
 }
 
 .lede {
@@ -405,12 +411,24 @@ button.danger:hover {
   align-items: flex-start;
 }
 
+/* Without this, flex items refuse to shrink below their content width and the
+   column strip pushes the page wider than the screen. */
+.stage-body > * {
+  min-width: 0;
+}
+
 /* Word list, in competition columns of 20 */
 .word-columns {
   display: flex;
   gap: 0.75rem;
+  max-width: 100%;
   overflow-x: auto;
+  overscroll-behavior-x: contain;
+  scroll-snap-type: x proximity;
   padding-bottom: 0.5rem;
+  /* Tapping through a round shouldn't select text or flash highlights. */
+  user-select: none;
+  -webkit-user-select: none;
 }
 
 .word-column {
@@ -421,6 +439,8 @@ button.danger:hover {
   list-style: none;
   margin: 0;
   padding: 0.3rem;
+  flex: 0 0 auto;
+  scroll-snap-align: start;
   min-width: 11.5rem;
   max-width: 16rem;
   background: var(--panel);
@@ -521,6 +541,8 @@ button.danger:hover {
   font-size: 1.7rem;
   font-weight: 550;
   letter-spacing: -0.01em;
+  user-select: none;
+  -webkit-user-select: none;
 }
 
 .focus-slot input {
@@ -568,6 +590,22 @@ button.danger:hover {
   margin: 0;
   color: var(--ink-faint);
   font-size: 0.85rem;
+  text-align: center;
+}
+
+/* Show whichever hint matches the input device rather than guessing by width. */
+.hint-touch {
+  display: none;
+}
+
+@media (pointer: coarse) {
+  .hint-keyboard {
+    display: none;
+  }
+
+  .hint-touch {
+    display: inline;
+  }
 }
 
 /* Evaluation */
@@ -621,6 +659,12 @@ button.danger:hover {
   font-weight: 600;
   font-variant-numeric: tabular-nums;
   letter-spacing: -0.02em;
+}
+
+/* The review is for reading (and copying) rather than tapping through. */
+.review {
+  user-select: text;
+  -webkit-user-select: text;
 }
 
 .review .word-column li {
@@ -718,28 +762,122 @@ caption.empty-state {
 
 @media (max-width: 800px) {
   main {
-    padding: 1.5rem 1.25rem;
+    padding: 1rem max(1.1rem, env(safe-area-inset-right)) 1.25rem
+      max(1.1rem, env(safe-area-inset-left));
+  }
+
+  h1 {
+    font-size: 1.5rem;
   }
 
   .site-header {
-    padding: 0.8rem 1.25rem;
+    padding: 0.7rem max(1.1rem, env(safe-area-inset-right)) 0.7rem
+      max(1.1rem, env(safe-area-inset-left));
   }
 
+  .site-header .link-button {
+    padding: 0.5rem 0.85rem;
+  }
+
+  .site-footer {
+    padding-bottom: max(1.25rem, env(safe-area-inset-bottom));
+  }
+
+  /* The word being memorised comes first; the full list sits underneath. */
   .stage-body {
     flex-direction: column-reverse;
-    gap: 1.5rem;
+    gap: 1.25rem;
+  }
+
+  /* Keep the countdown in view while scrolling a long word list. */
+  .stage-header {
+    position: sticky;
+    top: 0;
+    z-index: 5;
+    gap: 0.75rem;
+    padding: 0.6rem 0;
+    background: var(--bg);
+  }
+
+  .stage-meta {
+    gap: 0.6rem;
+  }
+
+  .clock {
+    font-size: 1.1rem;
+    padding: 0.45rem 0.6rem;
+  }
+
+  .focus {
+    width: 100%;
+  }
+
+  .focus-card {
+    width: 100%;
+    gap: 0.5rem;
   }
 
   .focus-slot {
     min-width: 0;
-    width: 100%;
+    flex: 1;
+    padding: 0 0.9rem;
+  }
+
+  .focus-word {
+    font-size: 1.5rem;
+  }
+
+  /* Comfortable thumb targets: ~46px arrows and taller list rows. */
+  .step {
+    width: 2.9rem;
+    height: 2.9rem;
+    flex: 0 0 auto;
+  }
+
+  .word-column li {
+    padding: 0.8rem 0.7rem;
+  }
+
+  .word-column {
+    min-width: 10.5rem;
   }
 
   .field > span {
     min-width: 6rem;
   }
 
+  .interstitial {
+    padding-top: 3rem;
+  }
+
   .interstitial h1 {
-    font-size: 1.9rem;
+    font-size: 1.8rem;
+  }
+
+  .stats {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  /* Full-width, thumb-height buttons, with the stage's main action pinned
+     above the fold so a long word list never buries it. */
+  .screen > button.primary {
+    width: 100%;
+    padding: 0.85rem 1.1rem;
+  }
+
+  #screen-memorize > button.primary,
+  #screen-recall > button.primary {
+    position: sticky;
+    bottom: max(0.75rem, env(safe-area-inset-bottom));
+    z-index: 5;
+  }
+
+  .button-row {
+    width: 100%;
+  }
+
+  .button-row button {
+    flex: 1 1 10rem;
+    padding: 0.75rem 1rem;
   }
 }

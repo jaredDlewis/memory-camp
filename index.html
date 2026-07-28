@@ -2,7 +2,10 @@
 <html lang="en">
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <meta name="theme-color" content="#f7f8fa" media="(prefers-color-scheme: light)" />
+    <meta name="theme-color" content="#0e1014" media="(prefers-color-scheme: dark)" />
+    <meta name="mobile-web-app-capable" content="yes" />
     <title>Memory Camp — Random Word Training</title>
     <link rel="stylesheet" href="styles.css" />
     <link
@@ -107,7 +110,10 @@
               </div>
               <button type="button" class="step" data-step="1" aria-label="Next word">▶</button>
             </div>
-            <p class="hint">← / → or space to move between words</p>
+            <p class="hint">
+              <span class="hint-keyboard">← / → or space to move between words</span>
+              <span class="hint-touch">Swipe the card or tap the arrows to move between words</span>
+            </p>
           </div>
         </div>
         <button type="button" class="primary" id="to-gap-button">Continue to reproduction</button>
@@ -137,12 +143,16 @@
                     autocorrect="off"
                     autocapitalize="off"
                     spellcheck="false"
+                    enterkeyhint="next"
                   />
                 </div>
               </div>
               <button type="button" class="step" data-step="1" aria-label="Next word">▶</button>
             </div>
-            <p class="hint">Enter for the next word, Shift+Enter to go back</p>
+            <p class="hint">
+              <span class="hint-keyboard">Enter for the next word, Shift+Enter to go back</span>
+              <span class="hint-touch">Return for the next word, or tap a slot in the list</span>
+            </p>
           </div>
         </div>
         <button type="button" class="primary" id="to-evaluation-button">Continue to evaluation</button>

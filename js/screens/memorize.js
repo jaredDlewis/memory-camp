@@ -90,4 +90,29 @@ section.addEventListener('click', (event) => {
   if (step) move(Number(step.dataset.step));
 });
 
+// Touch: swipe the card sideways to move through the words, since there are no
+// arrow keys on a phone. A swipe that is mostly vertical is left alone so the
+// page can still be scrolled from the card.
+const SWIPE_MIN_PX = 40;
+const focusCard = section.querySelector('.focus-card');
+let swipeStart = null;
+
+focusCard.addEventListener('pointerdown', (event) => {
+  swipeStart = event.pointerType === 'touch' ? { x: event.clientX, y: event.clientY } : null;
+});
+
+focusCard.addEventListener('pointerup', (event) => {
+  if (!swipeStart) return;
+  const dx = event.clientX - swipeStart.x;
+  const dy = event.clientY - swipeStart.y;
+  swipeStart = null;
+  if (Math.abs(dx) >= SWIPE_MIN_PX && Math.abs(dx) > Math.abs(dy)) {
+    move(dx < 0 ? 1 : -1);
+  }
+});
+
+focusCard.addEventListener('pointercancel', () => {
+  swipeStart = null;
+});
+
 continueButton.addEventListener('click', finish);

@@ -55,8 +55,21 @@ export function setActiveItem(container, index) {
     item.classList.remove('active');
   }
   const item = itemAt(container, index);
-  if (item) {
-    item.classList.add('active');
-    item.scrollIntoView({ block: 'nearest', inline: 'nearest' });
+  if (!item) return;
+  item.classList.add('active');
+  revealColumn(container, item);
+}
+
+// Brings the active word's column into view by scrolling the strip sideways and
+// nothing else. scrollIntoView would also scroll the page, which yanks the
+// layout around on a phone — especially with the on-screen keyboard open.
+function revealColumn(container, item) {
+  const strip = container.getBoundingClientRect();
+  const column = item.parentElement.getBoundingClientRect();
+
+  if (column.left < strip.left) {
+    container.scrollBy({ left: column.left - strip.left, behavior: 'smooth' });
+  } else if (column.right > strip.right) {
+    container.scrollBy({ left: column.right - strip.right, behavior: 'smooth' });
   }
 }
