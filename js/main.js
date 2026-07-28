@@ -1,4 +1,4 @@
-// Run state machine: setup → countdown → memorise → gap → recall → evaluation.
+// Run state machine: setup → countdown → memorize → gap → recall → evaluation.
 
 import { loadWordBank, pickWords } from './words.js';
 import { saveAttempt } from './storage.js';

@@ -66,10 +66,15 @@
    asymmetrically so. The result is text that measures centred but reads low.
    Trimming the leading down to cap height and baseline makes the box hug the
    glyphs, so centring the box centres what you actually see. Browsers without
-   text-box support simply keep the old, slightly low rendering. */
+   text-box support simply keep the old, slightly low rendering.
+
+   Text fields are deliberately left out: a field's box keeps its full line
+   height regardless, so the trim moves nothing, but the editor inside clips at
+   the trimmed edge and cuts off every descender (the tails of p, y, g). Their
+   text lands cap-centred anyway, because the leading a field adds above and
+   below its line is symmetric. */
 .focus-word,
 .focus-index,
-.focus-slot input,
 .word-column li .num,
 .word-column li .text,
 .clock,
@@ -788,7 +793,7 @@ caption.empty-state {
     padding-bottom: max(1.25rem, env(safe-area-inset-bottom));
   }
 
-  /* The word being memorised comes first; the full list sits underneath. */
+  /* The word being memorized comes first; the full list sits underneath. */
   .stage-body {
     flex-direction: column-reverse;
     gap: 1.25rem;

@@ -1,4 +1,4 @@
-// Memorise stage: the whole list on the left, one word in focus in the middle,
+// Memorize stage: the whole list on the left, one word in focus in the middle,
 // and a countdown that ends the stage on its own if the user does not.
 
 import { createTimer } from '../timer.js';

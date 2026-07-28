@@ -22,13 +22,13 @@ node checks.mjs
 
 ## How a round works
 
-`setup → 5s countdown → memorise → 10s gap → reproduction → evaluation`
+`setup → 5s countdown → memorize → 10s gap → reproduction → evaluation`
 
 - **Levels.** Level N gives you 5 × N words, with no upper limit; you pass a level by recalling
   every word correctly. Levels unlock one at a time — level N + 1 opens only once you have passed
   level N — so progress is tracked in your attempt history, and clearing that history resets it.
   A custom word count is always available for free practice at any size.
-- **Memorise.** The full list is on the left, one word is in focus in the middle. Move with ← / →
+- **Memorize.** The full list is on the left, one word is in focus in the middle. Move with ← / →
   or space, or click any word to jump to it.
 - **Reproduction.** Type each word back in order. Enter moves to the next slot, Shift+Enter back,
   and clicking a slot jumps to it. Both stages advance on their own when the timer runs out.

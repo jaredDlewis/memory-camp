@@ -1,5 +1,5 @@
 // Small shared DOM helpers: screen switching, the countdown clock, and the
-// column-of-20 word list used by the memorise, recall and evaluation screens.
+// column-of-20 word list used by the memorize, recall and evaluation screens.
 
 import { COLUMN_SIZE } from './scoring.js';
 import { formatClock } from './timer.js';
