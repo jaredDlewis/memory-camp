@@ -61,6 +61,22 @@
   box-sizing: border-box;
 }
 
+/* Centring a line of text centres its line box, which is built from the font's
+   ascender and descender metrics — both taller than the glyphs themselves, and
+   asymmetrically so. The result is text that measures centred but reads low.
+   Trimming the leading down to cap height and baseline makes the box hug the
+   glyphs, so centring the box centres what you actually see. Browsers without
+   text-box support simply keep the old, slightly low rendering. */
+.focus-word,
+.focus-index,
+.focus-slot input,
+.word-column li .num,
+.word-column li .text,
+.clock,
+.level-label {
+  text-box: trim-both cap alphabetic;
+}
+
 /* Layout rules below set `display`, which would otherwise beat [hidden]. */
 [hidden] {
   display: none !important;
@@ -353,7 +369,7 @@ button.danger:hover {
   font-size: 1.3rem;
   font-variant-numeric: tabular-nums;
   letter-spacing: 0.02em;
-  padding: 0.3rem 0.8rem;
+  padding: 0.55rem 0.85rem;
   color: var(--ink);
   background: var(--surface);
   border: 1px solid var(--line);
@@ -398,6 +414,10 @@ button.danger:hover {
 }
 
 .word-column {
+  /* Shared width of the number column, in rem so rows and the smaller
+     "expected" line below an answer indent by exactly the same amount. Fits
+     three digits. */
+  --index-col: 1.75rem;
   list-style: none;
   margin: 0;
   padding: 0.3rem;
@@ -410,11 +430,10 @@ button.danger:hover {
 
 .word-column li {
   display: flex;
-  /* Same reasoning as the focus card: the small number shares the word's
-     baseline instead of hanging above it. */
-  align-items: baseline;
+  /* Same reasoning as the focus card: cap bands centred on each other. */
+  align-items: center;
   gap: 0.6rem;
-  padding: 0.28rem 0.55rem;
+  padding: 0.45rem 0.6rem;
   border-radius: 6px;
   cursor: pointer;
   transition: background 0.12s ease;
@@ -429,7 +448,7 @@ button.danger:hover {
   font-variant-numeric: tabular-nums;
   font-size: 0.85rem;
   /* Three digits wide from the start, so words stay aligned past 99. */
-  min-width: 3ch;
+  min-width: var(--index-col);
   text-align: right;
 }
 
@@ -478,12 +497,12 @@ button.danger:hover {
   box-shadow: var(--shadow);
 }
 
-/* The position number is smaller than the word beside it, so the two sit on a
-   shared baseline rather than being centred as boxes — centring makes the
-   smaller number ride visibly high. The line is then centred in the card. */
+/* With the leading trimmed away, centring aligns the number's cap band with the
+   word's rather than aligning ascender metrics, so the two read as centred on
+   each other. The line as a whole is then centred in the card. */
 .focus-line {
   display: flex;
-  align-items: baseline;
+  align-items: center;
   gap: 1rem;
   width: 100%;
 }
@@ -608,7 +627,7 @@ button.danger:hover {
   cursor: default;
   flex-direction: column;
   align-items: stretch;
-  gap: 0.1rem;
+  gap: 0.25rem;
 }
 
 .review .word-column li:hover {
@@ -635,7 +654,7 @@ button.danger:hover {
 
 .review .expected {
   /* Line the expected word up under the answer, past the number column. */
-  padding-left: calc(3ch + 0.6rem);
+  padding-left: calc(var(--index-col) + 0.6rem);
   color: var(--ink-faint);
   font-size: 0.82rem;
   overflow-wrap: anywhere;
