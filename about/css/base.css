@@ -1,0 +1,169 @@
+/* Tokens are borrowed from the app's styles.css so the talk and the thing it is
+   about read as one project — same indigo, same ink, same light/dark pair. */
+:root {
+  color-scheme: light dark;
+
+  --bg: #f7f8fa;
+  --surface: #ffffff;
+  --panel: #f1f3f7;
+  --line: #e4e7ee;
+
+  --ink: #14161c;
+  --ink-soft: #646c7d;
+  --ink-faint: #9aa2b1;
+
+  --accent: #5457e5;
+  --accent-soft: #ececfd;
+  --accent-ring: rgba(84, 87, 229, 0.28);
+
+  --radius: 12px;
+  --radius-sm: 8px;
+  --shadow: 0 1px 2px rgba(18, 22, 33, 0.05), 0 8px 24px -12px rgba(18, 22, 33, 0.18);
+  --shadow-lg: 0 2px 4px rgba(18, 22, 33, 0.06), 0 28px 60px -28px rgba(18, 22, 33, 0.35);
+
+  --sans: ui-sans-serif, -apple-system, "SF Pro Text", "Segoe UI", system-ui, sans-serif;
+  --mono: ui-monospace, "SF Mono", "JetBrains Mono", Menlo, monospace;
+
+  /* Every slide's horizontal breathing room comes from here. */
+  --pad-x: clamp(1.5rem, 6vw, 6rem);
+  --measure: 62ch;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #0e1014;
+    --surface: #161a21;
+    --panel: #1a1f27;
+    --line: #242a34;
+
+    --ink: #e9ecf2;
+    --ink-soft: #9aa3b4;
+    --ink-faint: #6b7484;
+
+    --accent: #7b7df0;
+    --accent-soft: #21243a;
+    --accent-ring: rgba(123, 125, 240, 0.35);
+
+    --shadow: 0 1px 2px rgba(0, 0, 0, 0.4), 0 12px 28px -16px rgba(0, 0, 0, 0.7);
+    --shadow-lg: 0 2px 6px rgba(0, 0, 0, 0.5), 0 32px 64px -30px rgba(0, 0, 0, 0.85);
+  }
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+  /* Proximity is the safe floor. main.js promotes this to mandatory whenever
+     every slide fits on screen — a slide taller than the viewport would snap
+     back to its own start under mandatory and trap whatever sits below the
+     fold. */
+  scroll-snap-type: y proximity;
+}
+
+html.snap-hard {
+  scroll-snap-type: y mandatory;
+}
+
+body {
+  margin: 0;
+  /* Nothing should ever scroll the page sideways — wide content scrolls inside
+     its own container instead. */
+  overflow-x: hidden;
+  font-family: var(--sans);
+  font-size: clamp(1rem, 0.95rem + 0.3vw, 1.125rem);
+  line-height: 1.6;
+  color: var(--ink);
+  background: var(--bg);
+  -webkit-font-smoothing: antialiased;
+}
+
+h1,
+h2 {
+  margin: 0;
+  letter-spacing: -0.03em;
+  font-weight: 660;
+  text-wrap: balance;
+}
+
+h1 {
+  font-size: clamp(3rem, 11vw, 7.5rem);
+  line-height: 0.95;
+}
+
+h2 {
+  font-size: clamp(1.8rem, 4.2vw, 3.2rem);
+  line-height: 1.1;
+}
+
+p {
+  margin: 0;
+  text-wrap: pretty;
+}
+
+a {
+  color: var(--accent);
+  text-underline-offset: 0.2em;
+  text-decoration-thickness: 1px;
+}
+
+a:hover {
+  color: var(--ink);
+}
+
+:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
+  border-radius: 4px;
+}
+
+/* ---------- shared type flavours ---------- */
+
+.eyebrow,
+.kicker {
+  font-family: var(--mono);
+  font-size: 1rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--accent);
+}
+
+.lede {
+  font-size: clamp(1.1rem, 1.8vw, 1.4rem);
+  color: var(--ink-soft);
+  max-width: 46ch;
+}
+
+.byline {
+  font-family: var(--mono);
+  font-size: 1rem;
+  letter-spacing: 0.12em;
+  color: var(--ink-faint);
+}
+
+.accent {
+  color: var(--accent);
+}
+
+/* Stand-in blocks. Delete the element (or the class) once real media lands. */
+.placeholder-box {
+  display: grid;
+  place-items: center;
+  min-height: 15rem;
+  padding: 2rem;
+  text-align: center;
+  border: 1px dashed var(--ink-faint);
+  border-radius: var(--radius-sm);
+  background: var(--panel);
+  color: var(--ink-faint);
+  font-family: var(--mono);
+  font-size: 1rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.placeholder-box.wide {
+  aspect-ratio: 16 / 9;
+  min-height: 0;
+}

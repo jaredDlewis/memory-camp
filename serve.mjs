@@ -7,7 +7,7 @@ import { readFile } from 'node:fs/promises';
 import { extname, join, normalize, sep } from 'node:path';
 
 const root = process.cwd();
-const port = Number(process.argv[2]) || 8000;
+const port = Number(process.argv[2] || process.env.PORT) || 8000;
 
 const CONTENT_TYPES = {
   '.html': 'text/html; charset=utf-8',
